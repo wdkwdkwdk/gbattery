@@ -1,0 +1,50 @@
+{
+	"description": "项目配置文件。",
+  "cloudfunctionRoot": "/static/functions/",
+	"setting": {
+		"urlCheck": true,
+		"es6": false,
+		"postcss": true,
+		"minified": true,
+		"newFeature": true
+	},
+	"miniprogramRoot": "dist/",
+	"compileType": "miniprogram",
+	"appid": "wx39b3851c9e79a341",
+	"projectname": "gbattery",
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"currentL": -1,
+			"list": []
+		},
+		"miniprogram": {
+			"current": 0,
+			"list": [
+				{
+					"id": 0,
+					"name": "转发",
+					"pathName": "pages/index/main",
+					"query": "",
+					"scene": "1044",
+					"shareInfo": {
+						"groupName": "测试模拟群1",
+						"shareName": "cIEg7ZU2bXjpYSxrPzPum5uA4Gz1zeaPWLBfwQsenH0@cr4dev",
+						"shareKey": "ZwdGs1cCmojaJ5zARf4bWN7Zlsm5wtIt4ezQJ6QOsdBX3Ha5rBXUNYoKPTIg9IembtFzLCOGVFomuQbyklOlLg~~"
+					}
+				}
+			]
+		}
+	}
+}
