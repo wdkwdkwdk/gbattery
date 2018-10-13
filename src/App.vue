@@ -7,18 +7,38 @@ export default {
     wx.setStorageSync('logs', logs)
 
     console.log('app created and cache logs by setStorageSync')
-    this.login()
+    this.checkLogin()
   },
   onShow (obj) {
-    wx.getShareInfo({
-      shareTicket: obj.shareTicket,
-      success: res => {
-        console.log(res)
-        this.getGroupData(res)
-      }
-    })
+    console.log(obj)
+    if (obj.sene === '1044') {
+      wx.getShareInfo({
+        shareTicket: obj.shareTicket,
+        success: res => {
+          console.log(res)
+          this.getGroupData(res)
+        }
+      })
+    }
   },
   methods: {
+    checkLogin () {
+      this.checkSession()
+      const openid = wx.getStorageSync('openid')
+      const sessionKey = wx.getStorageSync('sessionkey')
+      if (openid && sessionKey) {
+        this.checkSession()
+      } else {
+        this.login()
+      }
+    },
+    checkSession () {
+      wx.checkSession({
+        success: res => {
+          console.log(res)
+        }
+      })
+    },
     login (callback, val) {
       wx.login({
         timeout: 4000,
@@ -33,7 +53,6 @@ export default {
               const result = JSON.parse(res.result)
               const sessionKey = result.session_key
               const openid = result.openid
-              console.log(result)
               wx.setStorageSync('sessionkey', sessionKey)
               wx.setStorageSync('openid', openid)
               if (callback) {

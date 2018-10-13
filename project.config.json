@@ -1,6 +1,6 @@
 {
 	"description": "项目配置文件。",
-  "cloudfunctionRoot": "/static/functions/",
+	"cloudfunctionRoot": "/static/functions/",
 	"setting": {
 		"urlCheck": true,
 		"es6": false,
@@ -30,7 +30,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 0,
+			"current": 1,
 			"list": [
 				{
 					"id": 0,
@@ -43,6 +43,11 @@
 						"shareName": "cIEg7ZU2bXjpYSxrPzPum5uA4Gz1zeaPWLBfwQsenH0@cr4dev",
 						"shareKey": "ZwdGs1cCmojaJ5zARf4bWN7Zlsm5wtIt4ezQJ6QOsdBX3Ha5rBXUNYoKPTIg9IembtFzLCOGVFomuQbyklOlLg~~"
 					}
+				},
+				{
+					"id": -1,
+					"name": "排名",
+					"pathName": "pages/rank/main"
 				}
 			]
 		}

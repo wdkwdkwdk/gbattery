@@ -1,7 +1,9 @@
 <template>
   <div class="container" @click="clickHandle('test click', $event)">
     <div class="wrapper">
-      <open-data type="groupName" :open-gid="gID"></open-data>
+      <p class="group-name">
+        <open-data type="groupName" :open-gid="gID"></open-data>
+      </p>
       <section class="battery">
         <p class="title">
           当前电量(%)
@@ -107,6 +109,11 @@ $runout: #ed684a;
   display: flex;
   align-items: center;
   justify-content: center;
+  .group-name{
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
   .battery{
     .title{
       text-align: center;

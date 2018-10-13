@@ -1,11 +1,13 @@
 {
   "pages": [
     "pages/index/main",
+    "pages/rank/main",
     "pages/logs/main"  ],
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "群电量",
     "navigationBarTextStyle": "black"
-  }
+  },
+  "cloud": true
 }
