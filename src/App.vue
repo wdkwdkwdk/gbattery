@@ -2,15 +2,41 @@
 export default {
   created () {
     // 调用API从本地缓存中获取数据
-    const logs = wx.getStorageSync('logs') || []
-    logs.unshift(Date.now())
-    wx.setStorageSync('logs', logs)
-
-    console.log('app created and cache logs by setStorageSync')
     this.checkLogin()
+    const db = wx.cloud.database({env: 'dev-952bab'})
+    // const todosCollection = db.collection('users').doc('W8GOEQ6qgQy38i34')
+    // console.log(todosCollection)
+    // db.collection('users').where({
+    //   _openid: wx.getStorageSync('openid') // 填入当前用户 openid
+    // }).get().then(res => {
+    //   console.log(res)
+    // })
+    // db.collection('users').add({
+    //   data: {
+    //     name: 'les'
+    //   }
+    // }).then(res => {
+    //   console.log(res)
+    // }).catch(console.error)
+    // db.collection('users').doc('W8Grrd2AWotkdVOa').update({
+    //   data: {
+    //     name: 'zeefix'
+    //   }
+    // }).then(
+    //   res => {
+    //     console.log('删除成功')
+    //   }
+    // )
+    db.collection('users').where({
+      // _openid: 'os4CW5B_j-0uLk4rh_FtciMyb89Y'
+      name: 'les'
+    }).get().then(
+      res => {
+        console.log(res, '...')
+      }
+    )
   },
   onShow (obj) {
-    console.log(obj)
     if (obj.sene === '1044') {
       wx.getShareInfo({
         shareTicket: obj.shareTicket,
