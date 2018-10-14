@@ -2,10 +2,10 @@
   "pages": [
     "pages/index/main",
     "pages/rank/main",
-    "pages/logs/main"  ],
+    "pages/login/main"  ],
   "window": {
-    "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#fff",
+    "backgroundTextStyle": "#4a4a4a",
+    "navigationBarBackgroundColor": "#f5f5f6",
     "navigationBarTitleText": "群电量",
     "navigationBarTextStyle": "black"
   },

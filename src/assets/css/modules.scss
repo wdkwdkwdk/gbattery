@@ -1,0 +1,26 @@
+$main: #4A4A4A;
+button{
+  padding: 0;
+  border: none;
+  &::after{
+    border: none;
+  }
+
+  &[disabled]{
+    opacity: 0.5;
+  }
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+}
+button[size="mini"]{
+  height: 40px;
+  line-height: 40px;
+  padding: 0 30px;
+  border-radius: 20px;
+  &.primary{
+    background-color: $main;
+    color: #fff;
+    &:active{
+      background-color: darken($main, 5%);
+    }
+  }
+}

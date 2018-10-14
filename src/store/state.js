@@ -1,3 +1,5 @@
 export default {
-  gID: ''
+  gID: '',
+  userInfo: '',
+  openid: wx.getStorageSync('openid')
 }

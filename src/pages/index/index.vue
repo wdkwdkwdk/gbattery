@@ -39,17 +39,41 @@ export default {
       withShareTicket: true
     })
     this.getBatteryInfo()
-    wx.cloud.callFunction({name: 'getOpenId'}).then(res => {
-      console.log(res.result.openId, 'origin')
-    })
+    const db = wx.cloud.database({env: 'dev-952bab'})
+    db.collection('users').where({
+      _openid: 'os4CW5B_j-0uLk4rh_FtciMyb89Y'
+    }).get().then(
+      res => {
+        console.log(res, '?xxxx')
+      },
+      error => {
+        if (error) {
+          console.log(error, '///???')
+        }
+      }
+    )
+    wx.cloud.callFunction({name: 'saveUser'}).then(
+      res => {
+        console.log(res)
+      }
+    )
   },
   onShow () {
     this.getBatteryInfo()
   },
   onShareAppMessage (share) {
+    const roomId = this.generateRoomId()
     return {
       title: '来和我比拼一下电量吧！',
-      path: '/pages/index/main'
+      path: `/pages/rank/main?id=${roomId}`,
+      success: res => {
+        this.generateRoom(roomId)
+      },
+      fail: error => {
+        if (error) {
+          console.log('失败')
+        }
+      }
     }
   },
   data () {
@@ -76,12 +100,23 @@ export default {
     },
     gID () {
       return this.$store.state.gID
+    },
+    openid () {
+      return this.$store.state.openid
     }
   },
   methods: {
     bindViewTap () {
       const url = '../logs/main'
       wx.navigateTo({ url })
+    },
+    generateRoomId () {
+      let roomId = ''
+      for (let i = 0; i < 6; i++) {
+        roomId += Math.floor(Math.random() * 10)
+      }
+      roomId = new Date().getTime() + roomId
+      return roomId
     },
     getBatteryInfo () {
       wx.getBatteryInfo({
@@ -91,9 +126,22 @@ export default {
         }
       })
     },
-
     clickHandle (msg, ev) {
       console.log('clickHandle:', msg, ev)
+    },
+    generateRoom (roomId) {
+      const batteryInfo = this.batteryInfo
+      wx.cloud.callFunction({
+        name: 'newMember',
+        data: {
+          roomId,
+          batteryInfo
+        }
+      }).then(
+        res => {
+          console.log(res, 'bbbb')
+        }
+      )
     }
   }
 }

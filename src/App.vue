@@ -2,6 +2,7 @@
 export default {
   created () {
     // 调用API从本地缓存中获取数据
+    this.getUserInfo()
     this.checkLogin()
     const db = wx.cloud.database({env: 'dev-952bab'})
     // const todosCollection = db.collection('users').doc('W8GOEQ6qgQy38i34')
@@ -48,6 +49,19 @@ export default {
     }
   },
   methods: {
+    getUserInfo () {
+      wx.getSetting({
+        success: res => {
+          if (res.authSetting['scope.userInfo']) {
+            wx.getUserInfo({
+              success: res => {
+                this.$store.commit('setUserInfo', res.userInfo)
+              }
+            })
+          }
+        }
+      })
+    },
     checkLogin () {
       this.checkSession()
       const openid = wx.getStorageSync('openid')
@@ -120,9 +134,11 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+@import './assets/css/modules.scss';
 page{
   height: 100%;
+  background-color: #f5f5f6;
 }
 .container {
   height: 100%;
@@ -134,5 +150,10 @@ page{
   -moz-transition: width 2s;
   -webkit-transition: width 2s;
   -o-transition: width 2s;
+}
+.ellipsis{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>

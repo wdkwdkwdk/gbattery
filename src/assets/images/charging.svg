@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 6.834 9.471">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+
+      .cls-2 {
+        filter: url(#路径_1);
+      }
+    </style>
+    <filter id="路径_1" x="0" y="0" width="6.834" height="9.471" filterUnits="userSpaceOnUse">
+      <feOffset input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="0.5" result="blur"/>
+      <feFlood flood-color="#4a4a4a" flood-opacity="0.604"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="充电" transform="translate(-108.5 -339.469)">
+    <g class="cls-2" transform="matrix(1, 0, 0, 1, 108.5, 339.47)">
+      <path id="路径_1-2" data-name="路径 1" class="cls-1" d="M430.083,184.561h1.468l-3.507,4.214,1.169-2.967h-1.305l1.305-3.5h2.529Z" transform="translate(-426.41 -180.8)"/>
+    </g>
+  </g>
+</svg>
