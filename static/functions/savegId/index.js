@@ -7,7 +7,7 @@ const db = cloud.database()
 exports.main = async (event, context) => {
   const { roomId, gId } = event
   try {
-    return await db.collection('behaviors').where({
+    return await db.collection('rooms').where({
       roomId
     }).update({
       data: {
