@@ -10,5 +10,29 @@
     "navigationBarTitleText": "群电量",
     "navigationBarTextStyle": "black"
   },
+  "tabBar": {
+    "color": "#9b9b9b",
+    "selectedColor": "#2a2a2a",
+    "list": [
+      {
+        "pagePath": "pages/list/main",
+        "text": "记录",
+        "iconPath": "static/tab/record.png",
+        "selectedIconPath": "static/tab/record-active.png"
+      }, 
+      {
+        "pagePath": "pages/index/main",
+        "text": "发起",
+        "iconPath": "static/tab/new.png",
+        "selectedIconPath": "static/tab/new-active.png"
+      },
+      {
+        "pagePath": "pages/rank/main",
+        "text": "好玩",
+        "iconPath": "static/tab/play.png",
+        "selectedIconPath": "static/tab/play-active.png"
+      }
+    ]
+  },
   "cloud": true
 }

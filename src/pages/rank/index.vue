@@ -32,13 +32,13 @@ const regeneratorRuntime = require('../../../static/regenerator-runtime/runtime.
 
 export default {
   mounted () {
+    this.roomId = this.$root.$mp.query.id
     this.init()
   },
   onShareAppMessage (share) {
-    const roomId = 1539523607141376027
     return {
       title: '来和我比拼一下电量吧单独！',
-      path: `/pages/rank/main?id=${roomId}`,
+      path: `/pages/rank/main?id=${this.roomId}`,
       success: res => {
         // this.generateRoom(roomId)
       },
@@ -51,6 +51,7 @@ export default {
   },
   data () {
     return {
+      roomId: '',
       gID: '',
       groupName: '毛线球科技',
       batteryInfo: {
@@ -91,11 +92,8 @@ export default {
   methods: {
     async init () {
       const isLogined = this.isLogined()
-      const isSessionValid = await this.checkSession()
-      console.log(isLogined, isSessionValid, 'valid')
       if (!isLogined) {
-        const roomId = this.$root.$mp.query.id
-        wx.reLaunch({url: `/pages/login/main?id=${roomId}`})
+        wx.reLaunch({url: `/pages/login/main?id=${this.roomId}`})
       } else {
         this.getGroupInfo()
         this.getBatteryInfo()
@@ -113,6 +111,7 @@ export default {
     },
     getGroupInfo () {
       const groupTempData = this.$store.state.groupTempData
+      console.log('whyasfasdfasdf')
       if (groupTempData) {
         wx.getShareInfo({
           shareTicket: groupTempData,
@@ -137,7 +136,7 @@ export default {
       })
     },
     getRank (batteryInfo) {
-      const roomId = this.$root.$mp.query.id
+      const roomId = this.roomId
       wx.cloud.callFunction({
         name: 'updateRoom',
         data: {
@@ -225,6 +224,7 @@ export default {
             res => {
               const gID = res.result.openGId
               this.gID = gID
+              console.log('LLLLL')
               this.savegId(gID)
             }
           )
@@ -234,14 +234,16 @@ export default {
         }
       } catch (error) {
         if (error) {
-          console.log(error)
+          console.log('dddd')
         }
       }
     },
     savegId (gId) {
+      const roomId = this.roomId
       wx.cloud.callFunction({
         name: 'savegId',
         data: {
+          roomId,
           gId
         }
       }).then(

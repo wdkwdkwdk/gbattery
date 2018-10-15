@@ -18,7 +18,7 @@ exports.main = async (event, context) => {
   )
   const match = {
     user: openId,
-    roomId: roomId
+    roomId
   }
   const getRank = async () => {
     const roomList = await db.collection('behaviors').where({
@@ -39,7 +39,7 @@ exports.main = async (event, context) => {
       )
       promiseList.push(user)
     }
-    return await Promise.all(promiseList).then(
+    const result = await Promise.all(promiseList).then(
       rankList => {
         let rank = rankList
         let me = {}
@@ -54,36 +54,47 @@ exports.main = async (event, context) => {
             }
           }
         }
-        const roomInfo = await db.collection('rooms').where({
-          roomId
-        }).get().then(
-          res => res.data
-        )
-        // if (roomInfo.length) {
-        //   await db.collection('rooms').where({
-        //     roomId
-        //   }).update({
-        //     data: {
-        //       updateTime: newDate().getTime(),
-        //       count: await db.collection('behaviors').where({roomId}).count()
-        //     }
-        //   })
-        // } else {
-        //   await db.collection('rooms').add({
-        //     data: {
-        //       roomId,
-        //       gId: 0,
-        //       updateTime: newDate().getTime(),
-        //       count: await db.collection('behaviors').where({roomId}).count()
-        //     }
-        //   })
-        // }
         return { rank, me }
       }
     )
+    const roomInfo = await db.collection('rooms').where({
+      roomId
+    }).get().then(
+      res => res.data
+    )
+    const count = await db.collection('behaviors').where({roomId}).count()
+    let updateResult = null
+    if (roomInfo.length) {
+      updateResult = await db.collection('rooms').where({
+        roomId
+      }).update({
+        data: {
+          updateTime: new Date().getTime(),
+          count: count.total
+        }
+      }).then(
+        res => {
+          return {index: 1}
+        }
+      )
+    } else {
+      updateResult = await db.collection('rooms').add({
+        data: {
+          roomId,
+          gId: 0,
+          updateTime: new Date().getTime(),
+          count: count.total
+        }
+      }).then(
+        res => {
+          return {index: 2}
+        }
+      )
+    }
+    return result
   }
   const itemData = {
-    roomId: roomId,
+    roomId,
     gId: '',
     user: openId,
     batteryLevel: batteryInfo.level,
@@ -95,7 +106,7 @@ exports.main = async (event, context) => {
       res => res.data
     )
   }
-  const roomArray = await db.collection('room').where({roomId}).get().then(
+  const roomArray = await db.collection('behaviors').where({roomId, user: openId}).get().then(
     res => res.data
   )
   if (roomArray.length) {

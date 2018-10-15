@@ -38,7 +38,8 @@ export default {
     )
   },
   onShow (obj) {
-    if (obj.scene === 1044) {
+    console.log(obj)
+    if (obj.scene - 0 === 1044) {
       this.$store.commit('setGroupTempData', obj.shareTicket)
       // wx.getShareInfo({
       //   shareTicket: obj.shareTicket,
