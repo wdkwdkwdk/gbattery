@@ -29,13 +29,12 @@ export default {
       try {
         this.isLogining = true
         const loginInfo = await this.login()
-        const isSessionValid = await this.checkSession()
-        console.log(isSessionValid, '[[[[')
-        wx.setStorageSync('sessionkey', loginInfo.sessionKey)
+        // const isSessionValid = await this.checkSession()
+        wx.setStorageSync('sessionkey', loginInfo.session_key)
         wx.setStorageSync('openid', loginInfo.openid)
         this.$store.commit('setOpenid', loginInfo.openid)
       } catch (error) {
-        console.log(error.message)
+        console.log(error.message, '??')
       }
       this.isLogining = false
     },
@@ -43,8 +42,7 @@ export default {
       return new Promise((resolve, reject) => {
         wx.checkSession({
           success: res => {
-            console.log(res, '?????')
-            if (res.errMsg !== 'checkSession:ok') {
+            if (res.errMsg === 'checkSession:ok') {
               resolve(true)
             } else {
               reject(new Error('invalid checksession 1'))
@@ -106,12 +104,16 @@ export default {
       }
     },
     saveUser (user) {
-      const db = wx.cloud.database({env: 'dev-952bab'})
-      db.collection('users').add({
-        data: user
-      }).then(res => {
-        console.log(res)
-      }).catch(console.error)
+      wx.cloud.callFunction({
+        name: 'saveUser',
+        data: {
+          user
+        }
+      }).then(
+        res => {
+          console.log(res)
+        }
+      )
     }
   }
 }

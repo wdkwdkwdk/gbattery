@@ -52,11 +52,6 @@ export default {
         }
       }
     )
-    wx.cloud.callFunction({name: 'saveUser'}).then(
-      res => {
-        console.log(res)
-      }
-    )
   },
   onShow () {
     this.getBatteryInfo()
@@ -132,14 +127,20 @@ export default {
     generateRoom (roomId) {
       const batteryInfo = this.batteryInfo
       wx.cloud.callFunction({
-        name: 'newMember',
+        name: 'updateRoom',
         data: {
           roomId,
           batteryInfo
         }
       }).then(
         res => {
-          console.log(res, 'bbbb')
+          console.log('ddd')
+        }
+      ).catch(
+        error => {
+          if (error) {
+            console.log(error)
+          }
         }
       )
     }

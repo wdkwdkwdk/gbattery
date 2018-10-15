@@ -26,7 +26,7 @@
         <img src="../assets/images/charging.svg" alt="充电中" class="is-charging" v-if="isCharging">
       </section>
       <span class="text">
-        {{ rankItem.batteryInfo.level }}%
+        {{ rankItem.batteryLevel }}%
       </span>
     </section>
   </div>
@@ -36,8 +36,7 @@ export default {
   props: ['index', 'rankItem'],
   computed: {
     batteryStatus () {
-      console.log(this.rankItem)
-      const level = this.rankItem.batteryInfo && this.rankItem.batteryInfo.level
+      const level = this.rankItem.batteryLevel
       if (level >= 0 && level < 20) {
         return 'runout'
       } else if (level >= 20 && level < 70) {
@@ -47,7 +46,7 @@ export default {
       }
     },
     isCharging () {
-      return this.rankItem.batteryInfo.isCharging
+      return this.rankItem.isCharging
     },
     formatTime () {
       let _date = this.rankItem.updateTime

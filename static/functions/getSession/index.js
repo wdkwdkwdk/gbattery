@@ -9,7 +9,6 @@ cloud.init()
 // 云函数入口函数
 exports.main = async (event, context) => {
   const { JSCODE } = event
-  console.log(JSCODE)
   return new Promise((resolve, reject) => {
     rp.get(`https://api.weixin.qq.com/sns/jscode2session?appid=${APP_ID}&secret=${SECRET}&js_code=${JSCODE}&grant_type=authorization_code`).then(
       res => {

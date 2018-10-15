@@ -38,14 +38,14 @@ export default {
     )
   },
   onShow (obj) {
-    if (obj.scene === '1044') {
+    if (obj.scene === 1044) {
       this.$store.commit('setGroupTempData', obj.shareTicket)
-      wx.getShareInfo({
-        shareTicket: obj.shareTicket,
-        success: res => {
-          this.getGroupData(res)
-        }
-      })
+      // wx.getShareInfo({
+      //   shareTicket: obj.shareTicket,
+      //   success: res => {
+      //     this.getGroupData(res)
+      //   }
+      // })
     }
   },
   methods: {
@@ -102,32 +102,33 @@ export default {
     },
     getGroupData (data) {
       console.log(data, '////')
-      // try {
-      //   const sessionKey = wx.getStorageSync('sessionkey')
-      //   const isSessionValid = true
-      //   if (sessionKey && isSessionValid) {
-      //     wx.cloud.callFunction({
-      //       name: 'getDecryptData',
-      //       data: {
-      //         sessionKey,
-      //         encryptedData: data.encryptedData,
-      //         iv: data.iv
-      //       }
-      //     }).then(
-      //       res => {
-      //         const gID = res.result.openGId
-      //         this.$store.commit('setGID', gID)
-      //       }
-      //     )
-      //   } else {
-      //     // this.login
-      //     this.login(this.getGroupData, data)
-      //   }
-      // } catch (error) {
-      //   if (error) {
-      //     console.log(error)
-      //   }
-      // }
+      try {
+        const sessionKey = wx.getStorageSync('sessionkey')
+        const isSessionValid = true
+        if (sessionKey && isSessionValid) {
+          wx.cloud.callFunction({
+            name: 'getDecryptData',
+            data: {
+              sessionKey,
+              encryptedData: data.encryptedData,
+              iv: data.iv
+            }
+          }).then(
+            res => {
+              console.log(res.result, '....')
+              const gID = res.result.openGId
+              this.$store.commit('setGID', gID)
+            }
+          )
+        } else {
+          // this.login
+          this.login(this.getGroupData, data)
+        }
+      } catch (error) {
+        if (error) {
+          console.log(error)
+        }
+      }
     }
   }
 }

@@ -1,6 +1,6 @@
 {
 	"description": "项目配置文件。",
-	"cloudfunctionRoot": "/static/functions/",
+	"cloudfunctionRoot": "static/functions/",
 	"setting": {
 		"urlCheck": true,
 		"es6": true,
@@ -48,7 +48,7 @@
 					"id": 1,
 					"name": "排名",
 					"pathName": "pages/rank/main",
-					"query": "id=1539523607141376027",
+					"query": "id=153959331524572970789",
 					"scene": "1044",
 					"shareInfo": {
 						"groupName": "测试模拟群2",
@@ -61,6 +61,18 @@
 					"name": "login",
 					"pathName": "pages/login/main",
 					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "列表",
+					"pathName": "pages/list/main",
+					"query": "",
+					"scene": "1044",
+					"shareInfo": {
+						"groupName": "测试模拟群2",
+						"shareName": "cIEg7ZU2bXjpYSxrPzPum5VWlIJZMGCBffIKwdFuVGc@cr4dev",
+						"shareKey": "-YU6AN1z3z6heCNZVBWX-wVeiLP2mnaEQuu8N3-z2xrtj1dQASNX1UNZgvgbY8ax2mFp-yfLCyH87WQlGuoLzw~~"
+					}
 				}
 			]
 		}

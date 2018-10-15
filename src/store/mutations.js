@@ -2,11 +2,8 @@ export default {
   setOpenid (state, val) {
     state.openid = val
   },
-  setGID (state, val) {
-    state.gID = val
-  },
   setUserInfo (state, val) {
-    state.userInfo = val
+    state.user = val
   },
   setGroupTempData (state, val) {
     state.groupTempData = val

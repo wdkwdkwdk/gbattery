@@ -2,7 +2,8 @@
   "pages": [
     "pages/index/main",
     "pages/rank/main",
-    "pages/login/main"  ],
+    "pages/list/main",
+    "pages/login/main"],
   "window": {
     "backgroundTextStyle": "#4a4a4a",
     "navigationBarBackgroundColor": "#f5f5f6",
