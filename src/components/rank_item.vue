@@ -12,7 +12,7 @@
               {{ rankItem.user.nickName }}
             </p>
             <p class="time">
-              {{ rankItem.user.updateTime }}
+              {{ formatTime }}
             </p>
           </div>
         </section>
@@ -23,7 +23,7 @@
         <img src="../assets/images/full.svg" alt="battery-icon" class="battery" v-if="batteryStatus === 'full'">
         <img src="../assets/images/notmuch.svg" alt="不多" class="battery" v-if="batteryStatus === 'notmuch'">
         <img src="../assets/images/runout.svg" alt="即将用尽" class="battery" v-if="batteryStatus === 'runout'">
-        <img src="../assets/images/charging.svg" alt="充电中" class="is-charging">
+        <img src="../assets/images/charging.svg" alt="充电中" class="is-charging" v-if="isCharging">
       </section>
       <span class="text">
         {{ rankItem.batteryInfo.level }}%
@@ -45,6 +45,30 @@ export default {
       } else {
         return 'full'
       }
+    },
+    isCharging () {
+      return this.rankItem.batteryInfo.isCharging
+    },
+    formatTime () {
+      let _date = this.rankItem.updateTime
+      let time = new Date().getTime()
+      let s
+      time = parseInt((time - _date) / 1000)
+      if (time < 60 * 10) {
+        return '刚刚'
+      } else if ((time < 60 * 60) && (time >= 60 * 10)) {
+        s = Math.floor(time / 60)
+        return `${s}分钟前`
+      } else if ((time < 60 * 60 * 24) && (time >= 60 * 60)) {
+        s = Math.floor(time / 60 / 60)
+        return `${s}小时前`
+      } else if ((time < 60 * 60 * 24 * 3) && (time >= 60 * 60 * 24)) {
+        s = Math.floor(time / 60 / 60 / 24)
+        return `${s}天前`
+      } else {
+        var date = new Date(parseInt(date) * 1000)
+        return date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate()
+      }
     }
   },
   methods: {
@@ -58,7 +82,8 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px;
+    padding: 20px;
+    padding-left: 10px;
     background-color: #fff;
     box-sizing: border-box;
     .member-info{
@@ -100,7 +125,7 @@ export default {
       display: flex;
       align-items: center;
       justify-content: flex-start;
-      width: 50px;
+      width: 60px;
       .icon{
         position: relative;
         margin-right: 8px;
@@ -112,8 +137,11 @@ export default {
         }
         .is-charging{
           position: absolute;
-          width: 4px;
-          height: 7px;
+          width: 10px;
+          height: 10px;
+          top: 60%;
+          left: 50%;
+          transform: translate(-50%, -50%);
         }
       }
       .text{

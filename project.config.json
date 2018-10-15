@@ -48,7 +48,13 @@
 					"id": 1,
 					"name": "排名",
 					"pathName": "pages/rank/main",
-					"query": "id=1539523607141376027"
+					"query": "id=1539523607141376027",
+					"scene": "1044",
+					"shareInfo": {
+						"groupName": "测试模拟群2",
+						"shareName": "cIEg7ZU2bXjpYSxrPzPum5VWlIJZMGCBffIKwdFuVGc@cr4dev",
+						"shareKey": "-YU6AN1z3z6heCNZVBWX-wVeiLP2mnaEQuu8N3-z2xrtj1dQASNX1UNZgvgbY8ax2mFp-yfLCyH87WQlGuoLzw~~"
+					}
 				},
 				{
 					"id": -1,

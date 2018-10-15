@@ -7,5 +7,8 @@ export default {
   },
   setUserInfo (state, val) {
     state.userInfo = val
+  },
+  setGroupTempData (state, val) {
+    state.groupTempData = val
   }
 }

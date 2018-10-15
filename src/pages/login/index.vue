@@ -95,7 +95,12 @@ export default {
       if (user) {
         this.$store.commit('setUserInfo', user)
         this.saveUser(user)
-        wx.reLaunch({url: '/pages/index/main'})
+        const roomId = this.$root.$mp.query.id
+        if (roomId) {
+          wx.reLaunch({url: `/pages/rank/main?id=${roomId}`})
+        } else {
+          wx.reLaunch({url: '/pages/index/main'})
+        }
       } else {
         console.log('授权失败')
       }

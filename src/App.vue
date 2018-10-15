@@ -38,11 +38,11 @@ export default {
     )
   },
   onShow (obj) {
-    if (obj.sene === '1044') {
+    if (obj.scene === '1044') {
+      this.$store.commit('setGroupTempData', obj.shareTicket)
       wx.getShareInfo({
         shareTicket: obj.shareTicket,
         success: res => {
-          console.log(res)
           this.getGroupData(res)
         }
       })
@@ -63,21 +63,13 @@ export default {
       })
     },
     checkLogin () {
-      this.checkSession()
       const openid = wx.getStorageSync('openid')
       const sessionKey = wx.getStorageSync('sessionkey')
       if (openid && sessionKey) {
-        this.checkSession()
+        // this.checkSession()
       } else {
         this.login()
       }
-    },
-    checkSession () {
-      wx.checkSession({
-        success: res => {
-          console.log(res)
-        }
-      })
     },
     login (callback, val) {
       wx.login({
@@ -109,26 +101,33 @@ export default {
       })
     },
     getGroupData (data) {
-      const sessionKey = wx.getStorageSync('sessionkey')
-      if (sessionKey) {
-        wx.cloud.callFunction({
-          name: 'getDecryptData',
-          data: {
-            sessionKey,
-            encryptedData: data.encryptedData,
-            iv: data.iv
-          }
-        }).then(
-          res => {
-            // console.log(res.result.openGId, '??????????????')
-            const gID = res.result.openGId
-            this.$store.commit('setGID', gID)
-          }
-        )
-      } else {
-        // this.login
-        this.login(this.getGroupData, data)
-      }
+      console.log(data, '////')
+      // try {
+      //   const sessionKey = wx.getStorageSync('sessionkey')
+      //   const isSessionValid = true
+      //   if (sessionKey && isSessionValid) {
+      //     wx.cloud.callFunction({
+      //       name: 'getDecryptData',
+      //       data: {
+      //         sessionKey,
+      //         encryptedData: data.encryptedData,
+      //         iv: data.iv
+      //       }
+      //     }).then(
+      //       res => {
+      //         const gID = res.result.openGId
+      //         this.$store.commit('setGID', gID)
+      //       }
+      //     )
+      //   } else {
+      //     // this.login
+      //     this.login(this.getGroupData, data)
+      //   }
+      // } catch (error) {
+      //   if (error) {
+      //     console.log(error)
+      //   }
+      // }
     }
   }
 }

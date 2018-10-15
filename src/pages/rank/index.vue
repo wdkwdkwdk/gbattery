@@ -26,10 +26,32 @@
 </template>
 <script>
 import rankitem from '@/components/rank_item'
+/* eslint-disable-next-line */
+const regeneratorRuntime = require('../../../static/regenerator-runtime/runtime.js')
 
 export default {
   mounted () {
+    const roomId = this.$root.$mp.query.id
+    if (!wx.getStorageSync('openid')) {
+      wx.reLaunch({url: `/pages/login/main?id=${roomId}`})
+    }
+    // this.getGroupInfo()
     this.getBatteryInfo()
+  },
+  onShareAppMessage (share) {
+    const roomId = 1539523607141376027
+    return {
+      title: '来和我比拼一下电量吧单独！',
+      path: `/pages/rank/main?id=${roomId}`,
+      success: res => {
+        // this.generateRoom(roomId)
+      },
+      fail: error => {
+        if (error) {
+          console.log('失败')
+        }
+      }
+    }
   },
   data () {
     return {
@@ -58,9 +80,27 @@ export default {
         rankData
       }
       return myRank
+    },
+    gID () {
+      console.log(this.$store.state.gID, '呀哈哈')
+      return this.$store.state.gID
     }
   },
   methods: {
+    getGroupInfo () {
+      const groupTempData = this.$store.state.groupTempData
+      if (groupTempData) {
+        wx.getShareInfo({
+          shareTicket: groupTempData,
+          success: res => {
+            this.getGroupData(res)
+          }
+        })
+      }
+      // if (groupTempData) {
+      //   this.getGroupData(this.$store.state.groupTempData)
+      // }
+    },
     getBatteryInfo () {
       wx.getBatteryInfo({
         success: res => {
@@ -81,9 +121,88 @@ export default {
       }).then(
         res => {
           this.rankData = res.result
-          console.log(res, '???')
         }
       )
+    },
+    login (callback, val) {
+      wx.login({
+        timeout: 4000,
+        success: res => {
+          wx.cloud.callFunction({
+            name: 'getSession',
+            data: {
+              JSCODE: res.code
+            }
+          }).then(
+            res => {
+              const result = JSON.parse(res.result)
+              const sessionKey = result.session_key
+              const openid = result.openid
+              wx.setStorageSync('sessionkey', sessionKey)
+              wx.setStorageSync('openid', openid)
+              if (callback) {
+                callback(val)
+              }
+            },
+            error => {
+              if (error) {
+                console.log(error)
+              }
+            }
+          )
+        }
+      })
+    },
+    checkSession () {
+      return new Promise((resolve, reject) => {
+        wx.checkSession({
+          success: res => {
+            console.log(res)
+            if (res.errMsg === 'checkSession:ok') {
+              /* eslint-disable-next-line */
+              resolve(true)
+            } else {
+              /* eslint-disable-next-line */
+              reject(false)
+            }
+          },
+          fail: error => {
+            if (error) {
+              /* eslint-disable-next-line */
+              reject(false)
+            }
+          }
+        })
+      })
+    },
+    async getGroupData (data) {
+      try {
+        this.checkSession()
+        const sessionKey = wx.getStorageSync('sessionkey')
+        const isSessionValid = await this.checkSession()
+        if (sessionKey && isSessionValid) {
+          wx.cloud.callFunction({
+            name: 'getDecryptData',
+            data: {
+              sessionKey,
+              encryptedData: data.encryptedData,
+              iv: data.iv
+            }
+          }).then(
+            res => {
+              const gID = res.result.openGId
+              this.$store.commit('setGID', gID)
+            }
+          )
+        } else {
+          // this.login
+          this.login(this.getGroupData, data)
+        }
+      } catch (error) {
+        if (error) {
+          console.log(error)
+        }
+      }
     }
   }
 }
