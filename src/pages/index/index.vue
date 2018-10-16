@@ -1,5 +1,5 @@
 <template>
-  <div class="container" @click="clickHandle('test click', $event)">
+  <div class="container">
     <div class="wrapper">
       <p class="group-name">
         <open-data type="groupName" :open-gid="gID"></open-data>
@@ -21,9 +21,16 @@
         </section>
       </section>
       <footer>
-        <button size="mini" open-type="share">
-          与好友比拼电量
-        </button>
+        <div>
+          <button size="mini" class="primary" open-type="share">
+            电量比拼
+          </button>
+        </div>
+        <div>
+          <button size="mini" class="plain" @click.stop="checkRecord">
+            历史记录
+          </button>
+        </div>
       </footer>
     </div>
   </div>  
@@ -31,42 +38,32 @@
 
 <script>
 import batteryImg from '@/images/battery.png'
-import chargeImg from '@/images/charge.svg'
-
+import chargeImg from '@/images/charge-dark.png'
 export default {
   mounted () {
     wx.showShareMenu({
       withShareTicket: true
     })
     this.getBatteryInfo()
-    const db = wx.cloud.database({env: 'dev-952bab'})
-    db.collection('users').where({
-      _openid: 'os4CW5B_j-0uLk4rh_FtciMyb89Y'
-    }).get().then(
-      res => {
-        console.log(res, '?xxxx')
-      },
-      error => {
-        if (error) {
-          console.log(error, '///???')
-        }
-      }
-    )
   },
   onShow () {
     this.getBatteryInfo()
+    if (!this.sended && this.roomId) {
+      this.generateRoom(this.roomId)
+    }
   },
   onShareAppMessage (share) {
-    const roomId = this.generateRoomId()
+    this.roomId = this.generateRoomId()
     return {
       title: '来和我比拼一下电量吧！',
-      path: `/pages/rank/main?id=${roomId}`,
+      path: `/pages/rank/main?id=${this.roomId}&share=1`,
       success: res => {
-        this.generateRoom(roomId)
+        this.generateRoom(this.roomId)
+        this.sended = true
       },
       fail: error => {
         if (error) {
-          console.log('失败')
+          // todo
         }
       }
     }
@@ -79,19 +76,21 @@ export default {
         isCharging: false
       },
       batteryImg,
-      chargeImg
+      chargeImg,
+      roomId: null,
+      sended: false
     }
   },
   computed: {
     batteryLifeStyle () {
       const rate = (this.batteryInfo.level / 100).toFixed(2)
-      return `transform: scaleY(${rate})`
+      return `transform: scaleX(${rate})`
     },
     lowBattery () {
-      return this.batteryInfo.level >= 10 && this.batteryInfo.level < 80
+      return this.batteryInfo.level >= 20 && this.batteryInfo.level < 70
     },
     runoutBattery () {
-      return this.batteryInfo.level < 10
+      return this.batteryInfo.level < 20
     },
     gID () {
       return this.$store.state.gID
@@ -121,9 +120,6 @@ export default {
         }
       })
     },
-    clickHandle (msg, ev) {
-      console.log('clickHandle:', msg, ev)
-    },
     generateRoom (roomId) {
       const batteryInfo = this.batteryInfo
       wx.cloud.callFunction({
@@ -134,15 +130,17 @@ export default {
         }
       }).then(
         res => {
-          console.log('ddd')
         }
       ).catch(
         error => {
           if (error) {
-            console.log(error)
+            // todo
           }
         }
       )
+    },
+    checkRecord () {
+      wx.navigateTo({url: '/pages/list/main'})
     }
   }
 }
@@ -150,9 +148,9 @@ export default {
 
 <style lang="scss" scoped>
 $main: #4E4C4C;
-$enough: #23ac38;
-$low: #ffab00;
-$runout: #ed684a;
+$enough: #84c33f;
+$low: #ffc700;
+$runout: #ffc700;
 
 .container{
   display: flex;
@@ -172,7 +170,7 @@ $runout: #ed684a;
     }
     .value{
       text-align: center;
-      margin-bottom: 40px;
+      margin-bottom: 30px;
       font-size: 50px;
       .level{
         font-size: 50px;
@@ -181,13 +179,13 @@ $runout: #ed684a;
     }
     .img-zone{
       position: relative;
-      width: 101px;
+      width: 250px;
       font-size: 0;
       margin: 0 auto;
       .battery{
         position: relative;
-        width: 101px;
-        height: 202px;
+        width: 250px;
+        height: 118px;
         z-index: 2;
       }
       .battery-process{
@@ -195,10 +193,10 @@ $runout: #ed684a;
         position: absolute;
         width: 100%;
         height: 100%;
-        transform: scaleY(0);
+        transform: scaleX(0);
         bottom: 0;
         left: 0;
-        transform-origin: center bottom;
+        transform-origin: left center;
         background-color: $enough;
         transition: all 1s ease-out;
         &.low-battery{
@@ -221,22 +219,11 @@ $runout: #ed684a;
   }
   footer{
     text-align: center;
-    margin-top: 40px;
-    button{
-      font-size: 14px;
-      height: 40px;
-      line-height: 40px;
-      border-radius: 20px;
-      padding: 0 20px;
-      background-color: $main;
-      color: #fff;
-      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
-      &:active{
-        background-color: darken($main, 5%);
-      }
-      &::after{
-        border: none;
-      }
+    display: flex;
+    align-items: center;
+    margin-top: 90px;
+    div:first-child{
+      margin-right: 30px;
     }
   }
 }

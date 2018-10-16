@@ -11,7 +11,7 @@ exports.main = async (event, context) => {
       roomId
     }).update({
       data: {
-        gId
+        gId: gId || 0
       }
     })
   } catch (error) {

@@ -2,7 +2,7 @@
 const cloud = require('wx-server-sdk')
 cloud.init()
 const db = cloud.database()
-
+const LIMIT = 100
 // 云函数入口函数
 exports.main = async (event, context) => {
   const { userInfo, roomId, batteryInfo } = event
@@ -11,7 +11,7 @@ exports.main = async (event, context) => {
     _openid: openId
   }).field({
     _id: true
-  }).get().then(
+  }).limit(LIMIT).get().then(
     res => {
       return res.data[0] && res.data[0]._id || null
     }
@@ -23,7 +23,7 @@ exports.main = async (event, context) => {
   const getRank = async () => {
     const roomList = await db.collection('behaviors').where({
       roomId
-    }).get().then(
+    }).limit(LIMIT).get().then(
       res => res.data
     )
     let promiseList = []
@@ -32,7 +32,7 @@ exports.main = async (event, context) => {
         _openid: key.user
       }).field({
         _openid: false
-      }).get().then(
+      }).limit(LIMIT).get().then(
         res => {
           return Object.assign(key, {user: res.data[0]})
         }
@@ -59,7 +59,7 @@ exports.main = async (event, context) => {
     )
     const roomInfo = await db.collection('rooms').where({
       roomId
-    }).get().then(
+    }).limit(LIMIT).get().then(
       res => res.data
     )
     const count = await db.collection('behaviors').where({roomId}).count()
@@ -95,18 +95,17 @@ exports.main = async (event, context) => {
   }
   const itemData = {
     roomId,
-    gId: '',
     user: openId,
     batteryLevel: batteryInfo.level,
     isCharging: batteryInfo.isCharging ? 1 : 0,
     updateTime: new Date().getTime()
   }
   const getRoomArray = () => {
-    return db.collection('behaviors').where(match).get().then(
+    return db.collection('behaviors').where(match).limit(LIMIT).get().then(
       res => res.data
     )
   }
-  const roomArray = await db.collection('behaviors').where({roomId, user: openId}).get().then(
+  const roomArray = await db.collection('behaviors').where({roomId, user: openId}).limit(LIMIT).get().then(
     res => res.data
   )
   if (roomArray.length) {

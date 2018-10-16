@@ -1,11 +1,11 @@
 $main: #4A4A4A;
+$plain: #f2f2f3;
 button{
   padding: 0;
   border: none;
   &::after{
     border: none;
   }
-
   &[disabled]{
     opacity: 0.5;
   }
@@ -21,6 +21,13 @@ button[size="mini"]{
     color: #fff;
     &:active{
       background-color: darken($main, 5%);
+    }
+  }
+  &.plain{
+    background-color: #f2f2f3;
+    &:active{
+      background-color: darken($plain, 5%);
+      color: $main;
     }
   }
 }

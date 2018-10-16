@@ -8,13 +8,6 @@ exports.main = async (event, context) => {
   const { userInfo, user } = event
   const openId = userInfo.openId
   const userData = Object.assign({_openid: openId}, user)
-  // try {
-  //   return await db.collection('users').where({
-  //     _openid: openId
-  //   }).get()
-  // } catch (error) {
-  //   return error
-  // }
   let userArray = await db.collection('users').where({
     _openid: openId
   }).get()

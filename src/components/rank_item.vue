@@ -12,7 +12,8 @@
               {{ rankItem.user.nickName }}
             </p>
             <p class="time">
-              {{ formatTime }}
+              <formattime :time="rankItem.updateTime">
+              </formattime>
             </p>
           </div>
         </section>
@@ -23,7 +24,7 @@
         <img src="../assets/images/full.svg" alt="battery-icon" class="battery" v-if="batteryStatus === 'full'">
         <img src="../assets/images/notmuch.svg" alt="不多" class="battery" v-if="batteryStatus === 'notmuch'">
         <img src="../assets/images/runout.svg" alt="即将用尽" class="battery" v-if="batteryStatus === 'runout'">
-        <img src="../assets/images/charging.svg" alt="充电中" class="is-charging" v-if="isCharging">
+        <img src="http://ojrbqzf6q.qnssl.com/FkUmomdxvOw9uOampoVGX08Dgh5-.png" alt="充电中" class="is-charging" v-if="isCharging">
       </section>
       <span class="text">
         {{ rankItem.batteryLevel }}%
@@ -32,6 +33,7 @@
   </div>
 </template>
 <script>
+import formattime from '@/components/format_time'
 export default {
   props: ['index', 'rankItem'],
   computed: {
@@ -47,32 +49,10 @@ export default {
     },
     isCharging () {
       return this.rankItem.isCharging
-    },
-    formatTime () {
-      let _date = this.rankItem.updateTime
-      let time = new Date().getTime()
-      let s
-      time = parseInt((time - _date) / 1000)
-      if (time < 60 * 10) {
-        return '刚刚'
-      } else if ((time < 60 * 60) && (time >= 60 * 10)) {
-        s = Math.floor(time / 60)
-        return `${s}分钟前`
-      } else if ((time < 60 * 60 * 24) && (time >= 60 * 60)) {
-        s = Math.floor(time / 60 / 60)
-        return `${s}小时前`
-      } else if ((time < 60 * 60 * 24 * 3) && (time >= 60 * 60 * 24)) {
-        s = Math.floor(time / 60 / 60 / 24)
-        return `${s}天前`
-      } else {
-        var date = new Date(parseInt(date) * 1000)
-        return date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate()
-      }
     }
   },
-  methods: {
-    getBatteryStatus () {
-    }
+  components: {
+    formattime
   }
 }
 </script>
@@ -136,9 +116,9 @@ export default {
         }
         .is-charging{
           position: absolute;
-          width: 10px;
-          height: 10px;
-          top: 60%;
+          width: 4px;
+          height: 7px;
+          top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
         }

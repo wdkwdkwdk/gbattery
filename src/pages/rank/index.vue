@@ -1,6 +1,6 @@
 <template>
-  <div class="rank">
-    <div class="inner">
+  <scroll-view scroll-y class="rank">
+    <div class="inner" v-if="rankData.rank.length">
       <section class="header">
         <p class="g-name">
           <!-- {{ groupName }} -->
@@ -23,28 +23,40 @@
         </ul>
       </section>
     </div>
-  </div>
+    <loading v-if="isLoading">
+    </loading>
+    <footer v-if="!isLoading && isByShare">
+      <button class="primary" size="mini" @click.stop="backHome">
+         回到首页
+      </button>
+    </footer>
+  </scroll-view>
 </template>
 <script>
+import loading from '@/components/loading'
 import rankitem from '@/components/rank_item'
 /* eslint-disable-next-line */
 const regeneratorRuntime = require('../../../static/regenerator-runtime/runtime.js')
 
 export default {
   mounted () {
-    this.roomId = this.$root.$mp.query.id
+    this.reset()
+    const query = this.$root.$mp.query
+    this.roomId = query.id
+    this.isByShare = query.share
+    this.gID = query.gid
     this.init()
   },
   onShareAppMessage (share) {
     return {
-      title: '来和我比拼一下电量吧单独！',
-      path: `/pages/rank/main?id=${this.roomId}`,
+      title: '来和我比拼一下电量吧',
+      path: `/pages/rank/main?id=${this.roomId}&share=1`,
       success: res => {
         // this.generateRoom(roomId)
       },
       fail: error => {
         if (error) {
-          console.log('失败')
+          // todo
         }
       }
     }
@@ -52,7 +64,9 @@ export default {
   data () {
     return {
       roomId: '',
+      isByShare: false,
       gID: '',
+      isLoading: false,
       groupName: '毛线球科技',
       batteryInfo: {
         level: 100,
@@ -63,11 +77,15 @@ export default {
           index: 0
         },
         rank: []
-      }
+      },
+      limit: 20,
+      offset: 0,
+      noMoreData: false
     }
   },
   components: {
-    rankitem
+    rankitem,
+    loading
   },
   computed: {
     myRank () {
@@ -90,6 +108,10 @@ export default {
     }
   },
   methods: {
+    reset () {
+      this.offset = 0
+      this.noMoreData = false
+    },
     async init () {
       const isLogined = this.isLogined()
       if (!isLogined) {
@@ -111,7 +133,6 @@ export default {
     },
     getGroupInfo () {
       const groupTempData = this.$store.state.groupTempData
-      console.log('whyasfasdfasdf')
       if (groupTempData) {
         wx.getShareInfo({
           shareTicket: groupTempData,
@@ -122,6 +143,9 @@ export default {
       }
     },
     getBatteryInfo () {
+      if (this.noMoreData) {
+        return
+      }
       wx.getBatteryInfo({
         success: res => {
           this.batteryInfo.level = res.level
@@ -130,13 +154,17 @@ export default {
         },
         fail: error => {
           if (error) {
-            console.log(error, 'battery')
+            // todo
           }
         }
       })
     },
     getRank (batteryInfo) {
       const roomId = this.roomId
+      if (!roomId) {
+        return
+      }
+      this.isLoading = true
       wx.cloud.callFunction({
         name: 'updateRoom',
         data: {
@@ -145,14 +173,27 @@ export default {
         }
       }).then(
         res => {
-          const result = res.result
-          if (result.me && result.rank.length) {
-            this.rankData = result
+          let result = res.result
+          let arr = result.rank
+          this.isLoading = false
+          if (result.me && arr.length) {
+            this.rankData.rank = arr
+            this.offset += this.limit
+            if (arr.length < this.limit) {
+              this.noMoreData = true
+            }
           }
         },
         error => {
           if (error) {
-            console.log(error, 'rank')
+            this.isLoading = false
+          }
+        }
+      ).catch(
+        error => {
+          if (error) {
+            this.isLoading = false
+            // todo
           }
         }
       )
@@ -168,11 +209,6 @@ export default {
             }
           }).then(
             res => {
-              // const result = JSON.parse(res.result)
-              // const sessionKey = result.session_key
-              // const openid = result.openid
-              // wx.setStorageSync('sessionkey', sessionKey)
-              // wx.setStorageSync('openid', openid)
               if (callback) {
                 callback(val)
               }
@@ -222,9 +258,11 @@ export default {
             }
           }).then(
             res => {
-              const gID = res.result.openGId
-              this.gID = gID
-              console.log('LLLLL')
+              let result = res.result
+              const gID = result.openGId
+              if (!this.gID) {
+                this.gID = gID
+              }
               this.savegId(gID)
             }
           )
@@ -234,32 +272,35 @@ export default {
         }
       } catch (error) {
         if (error) {
-          console.log('dddd')
+          // todo
         }
       }
     },
     savegId (gId) {
       const roomId = this.roomId
-      wx.cloud.callFunction({
-        name: 'savegId',
-        data: {
-          roomId,
-          gId
-        }
-      }).then(
-        res => {
-          console.log(res, '>>> update')
-        }
-      )
+      if (roomId) {
+        wx.cloud.callFunction({
+          name: 'savegId',
+          data: {
+            roomId,
+            gId
+          }
+        })
+      }
+    },
+    backHome () {
+      wx.reLaunch({url: '/pages/index/main'})
     }
   }
 }
 </script>
 <style lang="scss" scoped>
 .rank{
-  padding: 30px;
+  box-sizing: border-box;
+  height: 100%;
   .inner{
     text-align: center;
+    margin: 20px;
     .header{
       .g-name{
         font-size: 10px;
@@ -294,6 +335,10 @@ export default {
         }
       }
     }
+  }
+  footer{
+    margin-top: 30px;
+    text-align: center;
   }
 }
 </style>

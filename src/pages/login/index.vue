@@ -29,12 +29,11 @@ export default {
       try {
         this.isLogining = true
         const loginInfo = await this.login()
-        // const isSessionValid = await this.checkSession()
         wx.setStorageSync('sessionkey', loginInfo.session_key)
         wx.setStorageSync('openid', loginInfo.openid)
         this.$store.commit('setOpenid', loginInfo.openid)
       } catch (error) {
-        console.log(error.message, '??')
+        // todo
       }
       this.isLogining = false
     },
@@ -88,19 +87,12 @@ export default {
       })
     },
     bindGetUserInfo (e) {
-      console.log(e.target.userInfo)
       const user = e.target.userInfo
       if (user) {
         this.$store.commit('setUserInfo', user)
         this.saveUser(user)
-        const roomId = this.$root.$mp.query.id
-        if (roomId) {
-          wx.reLaunch({url: `/pages/rank/main?id=${roomId}`})
-        } else {
-          wx.reLaunch({url: '/pages/index/main'})
-        }
       } else {
-        console.log('授权失败')
+        // todo
       }
     },
     saveUser (user) {
@@ -112,6 +104,21 @@ export default {
       }).then(
         res => {
           console.log(res)
+          const roomId = this.$root.$mp.query.id
+          if (roomId) {
+            wx.reLaunch({url: `/pages/rank/main?id=${roomId}`})
+          } else {
+            wx.reLaunch({url: '/pages/index/main'})
+          }
+        }
+      ).catch(
+        error => {
+          if (error) {
+            wx.showToast({
+              icon: 'none',
+              title: '出错了，请重试。'
+            })
+          }
         }
       )
     }

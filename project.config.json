@@ -48,12 +48,12 @@
 					"id": 1,
 					"name": "排名",
 					"pathName": "pages/rank/main",
-					"query": "id=153959331524572970789",
+					"query": "id=1539677593723115118&share=1",
 					"scene": "1044",
 					"shareInfo": {
-						"groupName": "测试模拟群2",
-						"shareName": "cIEg7ZU2bXjpYSxrPzPum5VWlIJZMGCBffIKwdFuVGc@cr4dev",
-						"shareKey": "-YU6AN1z3z6heCNZVBWX-wVeiLP2mnaEQuu8N3-z2xrtj1dQASNX1UNZgvgbY8ax2mFp-yfLCyH87WQlGuoLzw~~"
+						"groupName": "测试模拟群3",
+						"shareName": "cIEg7ZU2bXjpYSxrPzPum75p1Ge_qFy0_MAu2ZGwCUA@cr4dev",
+						"shareKey": "2sYiN4nak74f3j5liWLbyxSOHXN0wa_SkJf2GP7-aU1kbRijDDzBDApASyO0Sp7fIhhB0hQe4JUDQ2ySVJ_UnA~~"
 					}
 				},
 				{
@@ -67,6 +67,18 @@
 					"name": "列表",
 					"pathName": "pages/list/main",
 					"query": "",
+					"scene": "1044",
+					"shareInfo": {
+						"groupName": "测试模拟群2",
+						"shareName": "cIEg7ZU2bXjpYSxrPzPum5VWlIJZMGCBffIKwdFuVGc@cr4dev",
+						"shareKey": "-YU6AN1z3z6heCNZVBWX-wVeiLP2mnaEQuu8N3-z2xrtj1dQASNX1UNZgvgbY8ax2mFp-yfLCyH87WQlGuoLzw~~"
+					}
+				},
+				{
+					"id": -1,
+					"name": "好玩",
+					"pathName": "pages/play/main",
+					"query": "id=153959331524572970789",
 					"scene": "1044",
 					"shareInfo": {
 						"groupName": "测试模拟群2",

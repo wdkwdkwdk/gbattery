@@ -3,6 +3,7 @@
     "pages/index/main",
     "pages/rank/main",
     "pages/list/main",
+    "pages/play/main",
     "pages/login/main"],
   "window": {
     "backgroundTextStyle": "#4a4a4a",
@@ -13,13 +14,9 @@
   "tabBar": {
     "color": "#9b9b9b",
     "selectedColor": "#2a2a2a",
+    "backgroundColor": "#f5f5f6",
+    "borderStyle": "white",
     "list": [
-      {
-        "pagePath": "pages/list/main",
-        "text": "记录",
-        "iconPath": "static/tab/record.png",
-        "selectedIconPath": "static/tab/record-active.png"
-      }, 
       {
         "pagePath": "pages/index/main",
         "text": "发起",
@@ -27,7 +24,7 @@
         "selectedIconPath": "static/tab/new-active.png"
       },
       {
-        "pagePath": "pages/rank/main",
+        "pagePath": "pages/play/main",
         "text": "好玩",
         "iconPath": "static/tab/play.png",
         "selectedIconPath": "static/tab/play-active.png"
