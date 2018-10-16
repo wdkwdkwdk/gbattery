@@ -15,7 +15,7 @@
         </p>
         <section class="img-zone">
           <img :src="batteryImg" alt="电池" class="battery">
-          <section class="battery-process" :class="lowBattery ? 'low-battery' : runoutBattery ? 'runout-battery' : ''" :style="batteryLifeStyle">
+          <section class="battery-process" :class="lowBattery ? 'low-battery' : runoutBattery ? 'runout-battery' : fullBattery ? 'full-battery' : ''" :style="batteryLifeStyle">
           </section>
           <img :src="chargeImg" alt="充电" class="charge" v-if="batteryInfo.isCharging">
         </section>
@@ -87,6 +87,9 @@ export default {
       const rate = (this.batteryInfo.level / 100).toFixed(2)
       return `transform: scaleX(${rate})`
     },
+    fullBattery () {
+      return this.batteryInfo.level >= 70
+    },
     lowBattery () {
       return this.batteryInfo.level >= 20 && this.batteryInfo.level < 70
     },
@@ -101,10 +104,6 @@ export default {
     }
   },
   methods: {
-    bindViewTap () {
-      const url = '../logs/main'
-      wx.navigateTo({ url })
-    },
     generateRoomId () {
       let roomId = ''
       for (let i = 0; i < 6; i++) {
@@ -116,7 +115,7 @@ export default {
     getBatteryInfo () {
       wx.getBatteryInfo({
         success: res => {
-          this.batteryInfo.level = res.level
+          this.batteryInfo.level = res.level > 0 ? res.level : 1
           this.batteryInfo.isCharging = res.isCharging
         }
       })
@@ -198,13 +197,16 @@ $runout: #ffc700;
         bottom: 0;
         left: 0;
         transform-origin: left center;
-        background-color: $enough;
+        background-color: $low;
         transition: all 1s ease-out;
         &.low-battery{
           background-color: $low;
         }
         &.runout-battery{
           background-color: $runout
+        }
+        &.full-battery{
+          background-color: $enough;
         }
       }
     }
