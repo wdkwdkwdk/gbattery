@@ -40,12 +40,16 @@ const regeneratorRuntime = require('../../../static/regenerator-runtime/runtime.
 
 export default {
   mounted () {
-    this.reset()
     const query = this.$root.$mp.query
     this.roomId = query.id
-    this.isByShare = query.share
-    this.gID = query.gid
-    this.init()
+    if (!this.isLogined()) {
+      wx.reLaunch({url: `/pages/login/main?id=${this.roomId}`})
+    } else {
+      this.reset()
+      this.isByShare = query.share
+      this.gID = query.gid
+      this.init()
+    }
   },
   onShareAppMessage (share) {
     return {
@@ -117,24 +121,14 @@ export default {
       this.offset = 0
       this.noMoreData = false
     },
-    async init () {
-      const isLogined = this.isLogined()
-      if (!isLogined) {
-        wx.reLaunch({url: `/pages/login/main?id=${this.roomId}`})
-      } else {
-        this.getGroupInfo()
-        this.getBatteryInfo()
-      }
-    },
     isLogined () {
-      const openid = wx.getStorageSync('openid')
-      const sessionKey = wx.getStorageSync('sessionkey')
-      // const user = this.user
-      if (openid && sessionKey) {
-        return true
-      } else {
-        return false
-      }
+      const openid = this.openid
+      const hasInfo = wx.getStorageSync('userinfo')
+      return openid && hasInfo
+    },
+    async init () {
+      this.getGroupInfo()
+      this.getBatteryInfo()
     },
     getGroupInfo () {
       const groupTempData = this.$store.state.groupTempData
@@ -181,7 +175,6 @@ export default {
           let result = res.result
           let arr = result.rank
           this.isLoading = false
-          console.log(res, 'resssssssssssss')
           if (result.me && arr.length) {
             this.rankData.rank = arr
             this.offset += this.limit
@@ -192,6 +185,7 @@ export default {
         },
         error => {
           if (error) {
+            // todo
             console.log(error)
             this.isLoading = false
           }
@@ -253,7 +247,6 @@ export default {
     },
     async getGroupData (data) {
       try {
-        this.checkSession()
         const sessionKey = wx.getStorageSync('sessionkey')
         const isSessionValid = await this.checkSession()
         if (sessionKey && isSessionValid) {
@@ -275,7 +268,6 @@ export default {
             }
           )
         } else {
-          // this.login
           this.login(this.getGroupData, data)
         }
       } catch (error) {

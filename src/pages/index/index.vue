@@ -41,10 +41,15 @@ import batteryImg from '@/images/battery.png'
 import chargeImg from '@/images/charge-dark.png'
 export default {
   mounted () {
-    wx.showShareMenu({
-      withShareTicket: true
-    })
-    this.getBatteryInfo()
+    console.log(wx.getStorageSync('userinfo'), wx.getStorageSync('openid'))
+    if (!this.isLogined()) {
+      wx.reLaunch({url: '/pages/login/main?'})
+    } else {
+      wx.showShareMenu({
+        withShareTicket: true
+      })
+      this.getBatteryInfo()
+    }
   },
   onShow () {
     this.getBatteryInfo()
@@ -104,6 +109,11 @@ export default {
     }
   },
   methods: {
+    isLogined () {
+      const openid = this.openid
+      const hasInfo = wx.getStorageSync('userinfo')
+      return openid && hasInfo
+    },
     generateRoomId () {
       let roomId = ''
       for (let i = 0; i < 6; i++) {

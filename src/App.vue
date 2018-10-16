@@ -1,7 +1,7 @@
 <script>
 export default {
   created () {
-    // 调用API从本地缓存中获取数据
+    this.hasInfo()
     this.checkLogin()
     this.getUserInfo()
   },
@@ -11,6 +11,19 @@ export default {
     }
   },
   methods: {
+    hasInfo () {
+      wx.cloud.callFunction({
+        name: 'getUser'
+      }).then(
+        res => {
+          if (res.result.total > 0) {
+            wx.setStorageSync('userinfo', 1)
+          } else {
+            wx.reLaunch({url: '/pages/login/main'})
+          }
+        }
+      )
+    },
     getUserInfo () {
       wx.getSetting({
         success: res => {
@@ -18,19 +31,26 @@ export default {
             wx.getUserInfo({
               success: res => {
                 this.$store.commit('setUserInfo', res.userInfo)
+              },
+              fail: error => {
+                if (error) {
+                  // wx.reLaunch({url: '/pages/login/main'})
+                }
               }
             })
+          } else {
+            // wx.reLaunch({url: '/pages/login/main'})
+          }
+        },
+        fail: error => {
+          if (error) {
+            // wx.reLaunch({url: '/pages/login/main'})
           }
         }
       })
     },
     checkLogin () {
-      const openid = wx.getStorageSync('openid')
-      if (!openid) {
-        wx.reLaunch({url: '/pages/login/main'})
-      } else {
-        this.login()
-      }
+      this.login()
     },
     login (callback, val) {
       wx.login({

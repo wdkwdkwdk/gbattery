@@ -103,9 +103,10 @@ export default {
         }
       }).then(
         res => {
+          wx.setStorageSync('userinfo', 1)
           const roomId = this.$root.$mp.query.id
           if (roomId) {
-            wx.reLaunch({url: `/pages/rank/main?id=${roomId}`})
+            wx.reLaunch({url: `/pages/rank/main?id=${roomId}&share=1`})
           } else {
             wx.reLaunch({url: '/pages/index/main'})
           }
