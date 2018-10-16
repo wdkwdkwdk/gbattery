@@ -1,5 +1,5 @@
 <template>
-  <scroll-view scroll-y class="list">
+  <scroll-view scroll-y class="container list">
     <div class="inner">
       <ul v-if="recordList.length">
         <li v-for="item in recordList" :key="item._id" @click.stop="checkDetail(item)">
@@ -9,7 +9,7 @@
                 <open-data type="groupName" :open-gid="item.gId"></open-data>     
               </span>
               <span v-else>
-                未知
+                好友
               </span>
             </p>
             <p class="count">
@@ -27,7 +27,7 @@
         <section>
           <img src="../../images/empty.svg" alt="空记录">
           <p>
-            参与或分享记录为空
+            暂无参与或分享记录
           </p>
         </section>
       </section>
@@ -60,7 +60,6 @@
           name: 'getRooms'
         }).then(
           res => {
-            console.log(res.result)
             this.isLoading = false
             this.recordList = res.result
           }
@@ -80,9 +79,8 @@
 </script>
 <style lang="scss" scoped>
   .list{
-    height: 100%;
     .inner{
-      height: 100%;
+      margin: 0 30px;
       .empty{
         height: 100vh;
         display: flex;
@@ -102,12 +100,11 @@
         }
       }
       ul{
-        margin: 30px;
         li{
           background-color: #fff;
           padding: 20px;
           &:not(:last-child){
-            margin-bottom: 30px;
+            margin-bottom: 20px;
           }
           .info{
             display: flex;

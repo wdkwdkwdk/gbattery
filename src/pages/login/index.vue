@@ -103,7 +103,6 @@ export default {
         }
       }).then(
         res => {
-          console.log(res)
           const roomId = this.$root.$mp.query.id
           if (roomId) {
             wx.reLaunch({url: `/pages/rank/main?id=${roomId}`})

@@ -57,6 +57,7 @@ export default {
     return {
       title: '来和我比拼一下电量吧！',
       path: `/pages/rank/main?id=${this.roomId}&share=1`,
+      imageUrl: 'http://ojrbqzf6q.qnssl.com/Fl-OTVl85MWtKYBlc0GxRlDciBz1.png',
       success: res => {
         this.generateRoom(this.roomId)
         this.sended = true
@@ -148,7 +149,7 @@ export default {
 
 <style lang="scss" scoped>
 $main: #4E4C4C;
-$enough: #84c33f;
+$enough: #00BEA5;
 $low: #ffc700;
 $runout: #ffc700;
 

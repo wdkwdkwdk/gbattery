@@ -1,5 +1,5 @@
 <template>
-  <scroll-view scroll-y class="rank">
+  <scroll-view scroll-y class="container rank">
     <div class="inner" v-if="rankData.rank.length">
       <section class="header">
         <p class="g-name">
@@ -216,6 +216,7 @@ export default {
             error => {
               if (error) {
                 console.log(error)
+                // todo
               }
             }
           )
@@ -296,11 +297,10 @@ export default {
 </script>
 <style lang="scss" scoped>
 .rank{
-  box-sizing: border-box;
-  height: 100%;
+  padding-bottom: 100px;
   .inner{
     text-align: center;
-    margin: 20px;
+    margin: 0 30px;
     .header{
       .g-name{
         font-size: 10px;
@@ -337,7 +337,10 @@ export default {
     }
   }
   footer{
-    margin-top: 30px;
+    position: fixed;
+    bottom: 30px;
+    left: 0;
+    width: 100%;
     text-align: center;
   }
 }

@@ -118,7 +118,7 @@ export default {
           position: absolute;
           width: 4px;
           height: 7px;
-          top: 50%;
+          top: 55%;
           left: 50%;
           transform: translate(-50%, -50%);
         }

@@ -101,7 +101,9 @@ page{
 }
 .container {
   height: 100%;
+  padding: 30px 0;
   color: #4a4a4a;
+  box-sizing: border-box;
 }
 /* this rule will be remove */
 * {
