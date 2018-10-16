@@ -73,7 +73,7 @@ export default {
     return {
       motto: 'Hello World',
       batteryInfo: {
-        level: 100,
+        level: 0,
         isCharging: false
       },
       batteryImg,
