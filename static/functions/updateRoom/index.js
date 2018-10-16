@@ -48,7 +48,7 @@ exports.main = async (event, context) => {
         }
         rank = rank.sort(sort)
         for (let i = 0; i < rank.length; i++) {
-          if (rank[i].user._id === userId) {
+          if (rank[i].user && rank[i].user._id === userId) {
             me = {
               index: i
             }

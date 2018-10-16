@@ -67,7 +67,6 @@ export default {
       isByShare: false,
       gID: '',
       isLoading: false,
-      groupName: '毛线球科技',
       batteryInfo: {
         level: 100,
         isCharging: false
@@ -109,6 +108,12 @@ export default {
   },
   methods: {
     reset () {
+      this.rankData = {
+        me: {
+          index: 0
+        },
+        rank: []
+      }
       this.offset = 0
       this.noMoreData = false
     },
@@ -176,6 +181,7 @@ export default {
           let result = res.result
           let arr = result.rank
           this.isLoading = false
+          console.log(res, 'resssssssssssss')
           if (result.me && arr.length) {
             this.rankData.rank = arr
             this.offset += this.limit
@@ -186,6 +192,7 @@ export default {
         },
         error => {
           if (error) {
+            console.log(error)
             this.isLoading = false
           }
         }
