@@ -175,6 +175,7 @@ export default {
           let result = res.result
           let arr = result.rank
           this.isLoading = false
+          this.rankData.me = result.me
           if (result.me && arr.length) {
             this.rankData.rank = arr
             this.offset += this.limit
