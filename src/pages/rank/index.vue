@@ -296,8 +296,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .rank{
-  padding-bottom: 100px;
   .inner{
+    padding-bottom: 100px;
     text-align: center;
     margin: 0 30px;
     .header{

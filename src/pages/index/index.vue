@@ -41,9 +41,8 @@ import batteryImg from '@/images/battery.png'
 import chargeImg from '@/images/charge-dark.png'
 export default {
   mounted () {
-    console.log(wx.getStorageSync('userinfo'), wx.getStorageSync('openid'))
     if (!this.isLogined()) {
-      wx.reLaunch({url: '/pages/login/main?'})
+      wx.reLaunch({url: '/pages/login/main'})
     } else {
       wx.showShareMenu({
         withShareTicket: true
