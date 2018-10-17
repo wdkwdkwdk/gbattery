@@ -28,7 +28,8 @@ exports.main = async (event, context) => {
     }
     return Promise.all(roomPromises).then(
       res => {
-        return res.filter(item => !(!item || item === ''))
+        const list = res.filter(item => !(!item || item === ''))
+        return list.reverse()
       }
     )
   } catch (e) {

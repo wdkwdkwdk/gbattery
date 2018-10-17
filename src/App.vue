@@ -1,7 +1,6 @@
 <script>
 export default {
   created () {
-    this.hasInfo()
     this.checkLogin()
     this.getUserInfo()
   },
@@ -11,19 +10,6 @@ export default {
     }
   },
   methods: {
-    hasInfo () {
-      wx.cloud.callFunction({
-        name: 'getUser'
-      }).then(
-        res => {
-          if (res.result.total > 0) {
-            wx.setStorageSync('userinfo', 1)
-          } else {
-            wx.reLaunch({url: '/pages/login/main'})
-          }
-        }
-      )
-    },
     getUserInfo () {
       wx.getSetting({
         success: res => {

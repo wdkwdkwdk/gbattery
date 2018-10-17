@@ -44,6 +44,7 @@ export default {
     if (!this.isLogined()) {
       wx.reLaunch({url: '/pages/login/main'})
     } else {
+      this.hasInfo()
       wx.showShareMenu({
         withShareTicket: true
       })
@@ -112,6 +113,21 @@ export default {
       const openid = this.openid
       const hasInfo = wx.getStorageSync('userinfo')
       return openid && hasInfo
+    },
+    hasInfo () {
+      if (wx.getStorageSync('openid')) {
+        wx.cloud.callFunction({
+          name: 'getUser'
+        }).then(
+          res => {
+            if (res.result.total > 0) {
+              wx.setStorageSync('userinfo', 1)
+            }
+          }
+        )
+      } else {
+        wx.reLaunch({url: '/pages/login/main'})
+      }
     },
     generateRoomId () {
       let roomId = ''
